@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BUMDes Arja Jaya Abadi – Desa Tinggarjaya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { poppins: ['Poppins', 'sans-serif'] },
+          colors: {
+            primary: { 50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d' },
+            accent:  { 100:'#ffedd5',400:'#fb923c',500:'#f97316',600:'#ea580c' },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: #f8fafc; color: #1e293b; }
+
+    /* ══════════════════════════════════════
+       NAVBAR – clean glassmorphism
+    ══════════════════════════════════════ */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      transition: background .4s, box-shadow .4s, border-color .4s;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.97);
+      box-shadow: 0 4px 30px rgba(0,0,0,.08);
+      border-color: rgba(22,163,74,.15);
+    }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .nav-brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .nav-brand img { height: 42px; width: 42px; border-radius: 50%; object-fit: cover; border: 2.5px solid #16a34a; transition: border-color .3s, transform .3s; }
+    .nav-brand:hover img { border-color: #f97316; transform: scale(1.07); }
+    .nav-brand-text .top { font-weight: 800; font-size: .95rem; color: #15803d; line-height: 1.1; }
+    .nav-brand-text .bot { font-size: .68rem; color: #6b7280; font-weight: 500; }
+
+    .nav-links { display: flex; align-items: center; gap: .25rem; list-style: none; }
+    .nav-links a {
+      font-size: .825rem; font-weight: 500; color: #475569;
+      padding: .45rem .85rem; border-radius: 9999px;
+      transition: color .25s, background .25s;
+      text-decoration: none; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 4px; left: 50%; right: 50%;
+      height: 2px; background: #16a34a; border-radius: 9999px;
+      transition: left .25s, right .25s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #15803d; }
+    .nav-links a:hover::after, .nav-links a.active::after { left: 14%; right: 14%; }
+    .nav-cta {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .5rem 1.2rem !important; background: #16a34a !important;
+      color: #fff !important; border-radius: 9999px !important;
+      font-weight: 600 !important; font-size: .8rem !important;
+      transition: background .25s, transform .25s, box-shadow .25s !important;
+      box-shadow: 0 4px 14px rgba(22,163,74,.35);
+    }
+    .nav-cta:hover { background: #15803d !important; transform: translateY(-1px) !important; box-shadow: 0 6px 20px rgba(22,163,74,.45) !important; }
+    .nav-cta::after { display: none !important; }
+
+    /* ── Hamburger ── */
+    .hamburger { display: none; flex-direction: column; gap: 5px; padding: .5rem; cursor: pointer; background: none; border: none; border-radius: .5rem; }
+    .hamburger span { display: block; width: 24px; height: 2.5px; background: #374151; border-radius: 9999px; transition: all .35s cubic-bezier(.68,-.55,.265,1.55); transform-origin: center; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+    @media (max-width: 767px) { .nav-links { display: none !important; } .hamburger { display: flex; } }
+
+    /* ── Mobile Drawer ── */
+    #mobile-drawer {
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 8999;
+      background: rgba(255,255,255,.98); backdrop-filter: blur(20px);
+      border-bottom: 1px solid #e5e7eb;
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s;
+    }
+    #mobile-drawer.open { max-height: 480px; opacity: 1; }
+    #mobile-drawer ul { list-style: none; padding: 1rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .25rem; }
+    #mobile-drawer a { display: block; padding: .7rem 1rem; border-radius: .75rem; font-size: .875rem; font-weight: 500; color: #374151; text-decoration: none; transition: background .2s, color .2s; }
+    #mobile-drawer a:hover { background: #f0fdf4; color: #16a34a; }
+    #mobile-drawer .mob-cta { background: #16a34a; color: #fff; text-align: center; border-radius: 9999px; margin-top: .5rem; font-weight: 600; }
+    #mobile-drawer .mob-cta:hover { background: #15803d; }
+
+    /* ══════════════════════════════════════
+       SECTION TITLE DECORATION
+    ══════════════════════════════════════ */
+    .sec-badge { font-size: .7rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: #f97316; margin-bottom: .4rem; }
+    .sec-title { font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1.2; }
+    .sec-title span { color: #16a34a; }
+    @media (min-width: 640px) { .sec-title { font-size: 2.35rem; } }
+    .sec-line { display: inline-block; width: 56px; height: 4px; border-radius: 9999px; background: linear-gradient(90deg,#16a34a,#f97316); margin-top: .55rem; }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero-overlay { background: linear-gradient(135deg,rgba(21,128,61,.88),rgba(20,83,45,.72)); }
+
+    /* ══════════════════════════════════════
+       SCROLL-REVEAL ANIMATIONS (CSS only)
+    ══════════════════════════════════════ */
+    [data-reveal] { opacity: 0; transition: opacity .7s ease, transform .7s ease; }
+    [data-reveal='up']    { transform: translateY(40px); }
+    [data-reveal='left']  { transform: translateX(-50px); }
+    [data-reveal='right'] { transform: translateX(50px); }
+    [data-reveal='scale'] { transform: scale(.88); }
+    [data-reveal='fade']  { transform: none; }
+    [data-reveal].revealed { opacity: 1 !important; transform: none !important; }
+
+    /* staggered delay helpers */
+    [data-delay='1'] { transition-delay: .1s; }
+    [data-delay='2'] { transition-delay: .2s; }
+    [data-delay='3'] { transition-delay: .3s; }
+    [data-delay='4'] { transition-delay: .4s; }
+    [data-delay='5'] { transition-delay: .5s; }
+    [data-delay='6'] { transition-delay: .6s; }
+
+    /* ── Counter number pop ── */
+    @keyframes countPop { 0%{transform:scale(.5);opacity:0} 70%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+    .stat-num { display: inline-block; }
+    .stat-num.pop { animation: countPop .6s ease forwards; }
+
+    /* ── Floating decorative blobs ── */
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; z-index: 0;
+      animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+    @keyframes blobFloat { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(20px,30px) scale(1.08)} }
+
+    /* ── Shimmer skeleton ── */
+    @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+
+    /* ── Card hover lift ── */
+    .lift-card { transition: transform .3s ease, box-shadow .3s ease; }
+    .lift-card:hover { transform: translateY(-7px); box-shadow: 0 20px 50px rgba(0,0,0,.11); }
+
+    /* ── Service icon wiggle on hover ── */
+    .svc-icon { transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+    .lift-card:hover .svc-icon { transform: rotate(-8deg) scale(1.15); }
+
+    /* ══════════════════════════════════════
+       ORG CHART
+    ══════════════════════════════════════ */
+    .org-card {
+      background: #fff; border: 1.5px solid #e5e7eb; border-radius: 1rem;
+      padding: 1.25rem 1rem; text-align: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,.06);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .org-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,.1); }
+
+    /* ══════════════════════════════════════
+       GALLERY MASONRY
+    ══════════════════════════════════════ */
+    .gallery-grid { columns: 2; column-gap: 1rem; }
+    @media(min-width:640px)  { .gallery-grid { columns: 3; } }
+    @media(min-width:1024px) { .gallery-grid { columns: 4; } }
+    .gallery-item { break-inside: avoid; margin-bottom: 1rem; border-radius: .85rem; overflow: hidden; cursor: pointer; position: relative; }
+    .gallery-item img { width: 100%; display: block; transition: transform .45s ease; }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-overlay { position: absolute; inset: 0; background: rgba(21,128,61,.5); opacity: 0; display: flex; align-items: center; justify-content: center; transition: opacity .3s; }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    /* ══════════════════════════════════════
+       LIGHTBOX
+    ══════════════════════════════════════ */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 99999;
+      background: rgba(0,0,0,.93);
+      display: none; align-items: center; justify-content: center;
+      animation: lbFadeIn .25s ease;
+    }
+    @keyframes lbFadeIn { from{opacity:0} to{opacity:1} }
+    #lightbox.active { display: flex; }
+    #lightbox img { max-width: 90vw; max-height: 88vh; border-radius: .6rem; object-fit: contain; box-shadow: 0 0 60px rgba(0,0,0,.6); }
+    #lb-close { position: absolute; top: 1.2rem; right: 1.5rem; color: #fff; font-size: 2.2rem; cursor: pointer; line-height: 1; opacity: .8; transition: opacity .2s, transform .2s; }
+    #lb-close:hover { opacity: 1; transform: rotate(90deg); }
+    #lb-prev, #lb-next { position: absolute; top: 50%; transform: translateY(-50%); color: #fff; font-size: 2rem; cursor: pointer; padding: .6rem 1rem; background: rgba(255,255,255,.1); border-radius: .5rem; user-select: none; transition: background .2s; }
+    #lb-prev:hover, #lb-next:hover { background: rgba(255,255,255,.25); }
+    #lb-prev { left: 1rem; } #lb-next { right: 1rem; }
+    #lb-caption { position: absolute; bottom: 1.2rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.7); font-size: .75rem; white-space: nowrap; }
+
+    /* ══════════════════════════════════════
+       POTENSI DESA SECTION
+    ══════════════════════════════════════ */
+    .potensi-card {
+      border-radius: 1.25rem; overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,.09);
+      transition: transform .35s, box-shadow .35s;
+    }
+    .potensi-card:hover { transform: translateY(-6px); box-shadow: 0 18px 50px rgba(0,0,0,.14); }
+
+    /* ── Stat ticker animation ── */
+    @keyframes tickUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+    .tick-card { animation: tickUp .7s ease both; }
+
+    /* ── Smooth scroll for anchor links ── */
+    html { scroll-padding-top: 80px; }
+
+    /* ══════════════════════════════════════
+       WhatsApp float
+    ══════════════════════════════════════ */
+    #wa-float {
+      position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 8000;
+      width: 56px; height: 56px; border-radius: 50%; background: #25D366;
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37,211,102,.55);
+      animation: waPulse 2.8s ease-in-out infinite;
+      transition: transform .25s;
+    }
+    #wa-float:hover { transform: scale(1.12); }
+    @keyframes waPulse {
+      0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,.55); }
+      50%      { box-shadow: 0 4px 40px rgba(37,211,102,.85), 0 0 0 10px rgba(37,211,102,.12); }
+    }
+
+    /* ── Footer ── */
+    .footer-link { color: #a7f3d0; text-decoration: none; transition: color .2s; }
+    .footer-link:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ WA FLOAT ════════════════ -->
+<a id="wa-float" href="https://wa.me/6282242350529" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- ════════════════ LIGHTBOX ════════════════ -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <span id="lb-close" title="Tutup">&times;</span>
+  <span id="lb-prev">&#8249;</span>
+  <img id="lb-img" src="" alt="Galeri BUMDes" />
+  <span id="lb-next">&#8250;</span>
+  <span id="lb-caption"></span>
+</div>
+
+<!-- ════════════════ NAVBAR ════════════════ -->
+<nav id="navbar" role="navigation" aria-label="Navigasi Utama">
+  <div class="nav-inner">
+    <!-- Brand -->
+    <a href="#beranda" class="nav-brand">
+      <img src="img/logo/logo.jpeg" alt="Logo BUMDes Arja Jaya Abadi" />
+      <div class="nav-brand-text">
+        <p class="top">BUMDes Arja Jaya Abadi</p>
+        <p class="bot">Desa Tinggarjaya &bull; Sidareja &bull; Cilacap</p>
+      </div>
+    </a>
+    <!-- Desktop links -->
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#beranda"    class="nav-link">Beranda</a></li>
+      <li><a href="#profil"     class="nav-link">Profil</a></li>
+      <li><a href="#potensi"    class="nav-link">Potensi Desa</a></li>
+      <li><a href="#pengurus"   class="nav-link">Pengurus</a></li>
+      <li><a href="#unit-usaha" class="nav-link">Unit Usaha</a></li>
+      <li><a href="#galeri"     class="nav-link">Galeri</a></li>
+      <li><a href="#kontak"     class="nav-link">Kontak</a></li>
+      <li>
+        <a href="https://wa.me/6282242350529" target="_blank" rel="noopener" class="nav-cta">
+          <i class="fa-brands fa-whatsapp"></i> Hubungi Kami
+        </a>
+      </li>
+    </ul>
+    <!-- Hamburger -->
+    <button class="hamburger" id="hamburger" aria-label="Buka menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div id="mobile-drawer" aria-hidden="true">
+  <ul>
+    <li><a href="#beranda">Beranda</a></li>
+    <li><a href="#profil">Profil</a></li>
+    <li><a href="#potensi">Potensi Desa</a></li>
+    <li><a href="#pengurus">Pengurus</a></li>
+    <li><a href="#unit-usaha">Unit Usaha</a></li>
+    <li><a href="#galeri">Galeri</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+    <li><a href="https://wa.me/6282242350529" target="_blank" rel="noopener" class="mob-cta"><i class="fa-brands fa-whatsapp mr-1"></i> Hubungi Kami</a></li>
+  </ul>
+</div>
+
+<!-- ════════════════ HERO ════════════════ -->
+<section id="beranda" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Decorative blobs -->
+  <div class="blob w-96 h-96 bg-primary-400/20 -top-20 -left-20" style="animation-duration:9s"></div>
+  <div class="blob w-72 h-72 bg-accent-400/20 bottom-10 right-10"  style="animation-duration:11s;animation-delay:2s"></div>
+  <!-- BG image -->
+  <img src="img/WhatsApp Image 2026-07-19 at 13.22.22.jpeg"
+       alt="Desa Tinggarjaya" class="absolute inset-0 w-full h-full object-cover" />
+  <div class="hero-overlay absolute inset-0"></div>
+  <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto pt-20">
+    <span class="inline-flex items-center gap-2 bg-white/15 border border-white/25 backdrop-blur text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-7 tracking-wide" data-reveal="up">
+      <i class="fa-solid fa-certificate text-accent-400"></i>
+      Perdes No. 02 Tahun 2018 &bull; Tinggarjaya, Sidareja, Cilacap
+    </span>
+    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-3 drop-shadow-lg" data-reveal="up" data-delay="1">
+      BUMDes <span class="text-accent-400">Arja Jaya</span> Abadi
+    </h1>
+    <p class="text-sm sm:text-xl font-light text-white/85 mb-2" data-reveal="up" data-delay="2">Desa Tinggarjaya, Kec. Sidareja, Kab. Cilacap</p>
+    <p class="text-lg sm:text-2xl font-semibold text-accent-400 italic mb-10" data-reveal="up" data-delay="3">
+      "Membangun Ekonomi Desa, Mensejahterakan Warga"
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center" data-reveal="up" data-delay="4">
+      <a href="https://wa.me/6282242350529" target="_blank" rel="noopener"
+         class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-bold rounded-full shadow-xl transition-all duration-300 hover:scale-105">
+        <i class="fa-brands fa-whatsapp text-xl"></i> Hubungi Kami
+      </a>
+      <a href="#profil"
+         class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/15 hover:bg-white/25 border border-white/40 text-white font-semibold rounded-full backdrop-blur transition-all duration-300">
+        <i class="fa-solid fa-circle-info"></i> Selengkapnya
+      </a>
+    </div>
+  </div>
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 animate-bounce">
+    <i class="fa-solid fa-angles-down text-2xl"></i>
+  </div>
+</section>
+
+<!-- ════════════════ STATS BAR ════════════════ -->
+<div class="bg-primary-700 text-white py-9 relative overflow-hidden">
+  <div class="blob w-64 h-64 bg-primary-500/30 -right-10 top-0" style="animation-duration:7s"></div>
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center relative z-10">
+    <div data-reveal="up" data-delay="1">
+      <p class="text-3xl font-extrabold text-accent-400 stat-num" data-target="7">7+</p>
+      <p class="text-xs font-medium mt-1 text-primary-100 uppercase tracking-wide">Unit Usaha Aktif</p>
+    </div>
+    <div data-reveal="up" data-delay="2">
+      <p class="text-3xl font-extrabold text-accent-400 stat-num" data-target="2018">2018</p>
+      <p class="text-xs font-medium mt-1 text-primary-100 uppercase tracking-wide">Tahun Berdiri</p>
+    </div>
+    <div data-reveal="up" data-delay="3">
+      <p class="text-3xl font-extrabold text-accent-400 stat-num">10.448</p>
+      <p class="text-xs font-medium mt-1 text-primary-100 uppercase tracking-wide">Jiwa Penduduk</p>
+    </div>
+    <div data-reveal="up" data-delay="4">
+      <p class="text-3xl font-extrabold text-accent-400 stat-num">3.019</p>
+      <p class="text-xs font-medium mt-1 text-primary-100 uppercase tracking-wide">Kepala Keluarga</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ PROFIL & LEGALITAS ════════════════ -->
+<section id="profil" class="py-20 bg-white relative overflow-hidden">
+  <div class="blob w-80 h-80 bg-primary-100 -left-20 top-10" style="animation-duration:12s"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Tentang Kami</p>
+      <h2 class="sec-title">Profil &amp; <span>Legalitas</span></h2>
+      <span class="sec-line"></span>
+    </div>
+    <!-- Legalitas badge -->
+    <div class="flex items-center gap-4 bg-primary-50 border border-primary-200 rounded-2xl p-5 mb-12 max-w-xl mx-auto" data-reveal="scale">
+      <div class="w-14 h-14 bg-primary-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+        <i class="fa-solid fa-file-contract text-white text-2xl"></i>
+      </div>
+      <div>
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Dasar Hukum Pendirian</p>
+        <p class="font-extrabold text-primary-800 text-lg">Perdes No. 02 Tahun 2018</p>
+        <p class="text-sm text-gray-500">Desa Tinggarjaya, Kecamatan Sidareja, Kabupaten Cilacap</p>
+      </div>
+    </div>
+    <!-- Visi & Misi -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-gradient-to-br from-primary-700 to-primary-900 rounded-2xl p-8 text-white shadow-xl" data-reveal="left">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-eye text-2xl text-accent-400"></i>
+          </div>
+          <h3 class="text-2xl font-bold">Visi</h3>
+        </div>
+        <p class="text-white/90 leading-relaxed text-sm">
+          Menjadi pendorong tumbuhnya usaha ekonomi dan kesejahteraan masyarakat Desa Tinggarjaya yang berkelanjutan dengan menjadikan Desa Tinggarjaya sebagai sentral perdagangan, jasa, pertanian dan industri kerakyatan yang kuat menuju masyarakat sejahtera, cerdas, sehat, dan terampil melalui pengembangan usaha ekonomi, peningkatan kapasitas dan kompetensi sumberdaya dan kelembagaan.
+        </p>
+      </div>
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8 shadow-xl" data-reveal="right">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-bullseye text-2xl text-white"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-primary-800">Misi</h3>
+        </div>
+        <ul class="space-y-3 text-sm text-gray-700">
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Memanfaatkan dan mengembangkan SDM lokal yang terampil dan berkompetensi tinggi.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Mendorong inovasi produk lokal unggulan berbasis potensi desa.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Meningkatkan daya saing usaha desa di pasar regional maupun nasional.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Mewujudkan sinergi dan jejaring kerjasama antar lembaga, mitra usaha, dan pemerintah.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Membangun ketahanan ekonomi kerakyatan yang mandiri dan berkelanjutan.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Mengembangkan infrastruktur pendukung ekonomi desa yang merata dan berkualitas.</span></li>
+          <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-primary-600 mt-0.5 flex-shrink-0"></i><span>Menciptakan lapangan kerja baru yang luas bagi seluruh warga Desa Tinggarjaya.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ POTENSI DESA ════════════════ -->
+<section id="potensi" class="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+  <div class="blob w-96 h-96 bg-accent-400/10 -right-24 bottom-0" style="animation-duration:13s"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+    <!-- Header -->
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Gambaran Umum</p>
+      <h2 class="sec-title">Potensi <span>Desa Tinggarjaya</span></h2>
+      <span class="sec-line"></span>
+      <p class="mt-4 text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">
+        Desa Tinggarjaya memiliki potensi ekonomi yang kuat pada sektor perdagangan, pertanian, UMKM, dan industri rumah tangga yang terus berkembang.
+      </p>
+    </div>
+
+    <!-- Main layout: image + text -->
+    <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+      <!-- Image -->
+      <div class="potensi-card" data-reveal="left">
+        <img src="img/potensi-desa.jpg"
+             alt="Potensi Desa Tinggarjaya"
+             class="w-full h-80 object-cover"
+             onerror="this.src='img/WhatsApp Image 2026-07-19 at 13.22.19.jpeg'" />
+        <div class="bg-primary-700 px-6 py-4">
+          <p class="text-white font-semibold text-sm flex items-center gap-2">
+            <i class="fa-solid fa-location-dot text-accent-400"></i>
+            Desa Tinggarjaya, Kec. Sidareja, Kab. Cilacap, Jawa Tengah
+          </p>
+        </div>
+      </div>
+
+      <!-- Text content -->
+      <div class="space-y-5" data-reveal="right">
+        <p class="text-gray-600 leading-relaxed text-sm">
+          Desa Tinggarjaya merupakan salah satu desa yang berada di wilayah Kecamatan Sidareja, Kabupaten Cilacap, Provinsi Jawa Tengah. Desa ini memiliki potensi yang cukup baik dalam pengembangan ekonomi masyarakat, khususnya pada sektor <strong class="text-primary-700">perdagangan, usaha mikro, pertanian, serta industri rumah tangga</strong>.
+        </p>
+        <p class="text-gray-600 leading-relaxed text-sm">
+          Secara geografis, Desa Tinggarjaya berada pada posisi yang strategis karena tidak jauh dari pusat Kecamatan Sidareja yang menjadi salah satu pusat aktivitas ekonomi di wilayah Cilacap bagian barat. Kondisi ini memberikan peluang yang baik bagi pengembangan usaha dan aktivitas perdagangan desa.
+        </p>
+        <p class="text-gray-600 leading-relaxed text-sm">
+          Selain sektor pertanian, potensi usaha masyarakat juga berkembang pada bidang UMKM, perdagangan kebutuhan harian, produk rumahan, dan jasa masyarakat. Keberadaan BUMDes diharapkan menjadi penggerak utama pemasaran produk lokal sekaligus mendukung peningkatan Pendapatan Asli Desa (PADes).
+        </p>
+        <!-- Source tags -->
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="text-xs bg-primary-50 border border-primary-200 text-primary-700 px-3 py-1 rounded-full font-medium">
+            <i class="fa-solid fa-book mr-1"></i> Sumber: tinggarjaya.panda.id
+          </span>
+          <span class="text-xs bg-primary-50 border border-primary-200 text-primary-700 px-3 py-1 rounded-full font-medium">
+            <i class="fa-solid fa-book mr-1"></i> Katalog BPS: 1102001.3301070
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat cards row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-16">
+      <div class="tick-card bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-md lift-card" data-reveal="up" data-delay="1" style="animation-delay:.1s">
+        <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-users text-primary-600 text-xl"></i>
+        </div>
+        <p class="text-2xl font-extrabold text-primary-700">10.448</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Jiwa Penduduk</p>
+      </div>
+      <div class="tick-card bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-md lift-card" data-reveal="up" data-delay="2" style="animation-delay:.2s">
+        <div class="w-12 h-12 bg-accent-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-house-chimney text-accent-500 text-xl"></i>
+        </div>
+        <p class="text-2xl font-extrabold text-accent-500">3.019</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Kepala Keluarga</p>
+      </div>
+      <div class="tick-card bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-md lift-card" data-reveal="up" data-delay="3" style="animation-delay:.3s">
+        <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-map text-sky-600 text-xl"></i>
+        </div>
+        <p class="text-2xl font-extrabold text-sky-600">5.12 km²</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Luas Wilayah</p>
+      </div>
+      <div class="tick-card bg-white border border-gray-100 rounded-2xl p-5 text-center shadow-md lift-card" data-reveal="up" data-delay="4" style="animation-delay:.4s">
+        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-store text-emerald-600 text-xl"></i>
+        </div>
+        <p class="text-2xl font-extrabold text-emerald-600">UMKM+</p>
+        <p class="text-xs text-gray-500 font-medium mt-1">Pelaku Usaha Lokal</p>
+      </div>
+    </div>
+
+    <!-- Sektor potensi cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-md lift-card" data-reveal="up" data-delay="1">
+        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-seedling text-green-600 text-2xl svc-icon"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-2">Sektor Pertanian</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Mayoritas warga bermatapencaharian di bidang pertanian. Lahan pertanian desa yang subur menjadi tulang punggung ketahanan pangan lokal.</p>
+      </div>
+
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-md lift-card" data-reveal="up" data-delay="2">
+        <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-shop text-orange-500 text-2xl svc-icon"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-2">Perdagangan &amp; UMKM</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Aktivitas perdagangan yang tinggi didukung posisi strategis dekat pusat kecamatan. Pelaku UMKM terus berkembang dan membutuhkan wadah pemasaran yang terorganisir.</p>
+      </div>
+
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-md lift-card" data-reveal="up" data-delay="3">
+        <div class="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-industry text-purple-600 text-2xl svc-icon"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-2">Industri Rumah Tangga</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Beragam produk rumahan menjadi potensi unggulan desa. BUMDes hadir sebagai jembatan antara produsen lokal dan pasar yang lebih luas.</p>
+      </div>
+
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-md lift-card" data-reveal="up" data-delay="4">
+        <div class="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-fish text-teal-600 text-2xl svc-icon"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-2">Budidaya Perikanan</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Potensi budidaya ikan air tawar terus dikembangkan melalui teknologi bioflok untuk memaksimalkan hasil panen dan pendapatan warga.</p>
+      </div>
+
+      <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-md lift-card" data-reveal="up" data-delay="5">
+        <div class="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-cow text-yellow-600 text-2xl svc-icon"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 mb-2">Peternakan</h3>
+        <p class="text-sm text-gray-500 leading-relaxed">Sektor peternakan sapi dikelola secara profesional oleh BUMDes untuk mendukung kebutuhan pangan protein hewani masyarakat setempat.</p>
+      </div>
+
+      <div class="bg-gradient-to-br from-primary-700 to-primary-900 rounded-2xl p-6 lift-card text-white" data-reveal="up" data-delay="6">
+        <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
+          <i class="fa-solid fa-chart-line text-accent-400 text-2xl"></i>
+        </div>
+        <h3 class="font-bold mb-2">Peluang Investasi</h3>
+        <p class="text-sm text-primary-200 leading-relaxed mb-4">Dengan jumlah penduduk besar dan aktivitas ekonomi yang dinamis, Desa Tinggarjaya menawarkan peluang investasi yang menjanjikan.</p>
+        <a href="https://wa.me/6282242350529" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 text-xs font-semibold bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-full transition">
+          <i class="fa-brands fa-whatsapp"></i> Diskusi Sekarang
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ SUSUNAN PENGURUS ════════════════ -->
+<section id="pengurus" class="py-20 bg-white relative overflow-hidden">
+  <div class="blob w-80 h-80 bg-primary-100 right-0 top-0" style="animation-duration:10s"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Struktur Organisasi</p>
+      <h2 class="sec-title">Susunan <span>Pengurus</span></h2>
+      <span class="sec-line"></span>
+      <p class="mt-4 text-gray-500 max-w-xl mx-auto text-sm">Pengurus BUMDes Arja Jaya Abadi yang berkomitmen memajukan ekonomi Desa Tinggarjaya.</p>
+    </div>
+
+    <!-- Tier 1: Penasihat -->
+    <div class="flex justify-center mb-1" data-reveal="up" data-delay="1">
+      <div class="org-card w-56 bg-gradient-to-br from-amber-50 to-amber-100 border-amber-300">
+        <div class="w-16 h-16 rounded-full bg-amber-400 flex items-center justify-center mx-auto mb-3 shadow-lg"><i class="fa-solid fa-user-tie text-white text-2xl"></i></div>
+        <p class="text-[10px] uppercase tracking-widest text-amber-600 font-bold mb-1">Penasihat</p>
+        <p class="font-extrabold text-gray-800 text-sm">SUWARNI</p>
+        <p class="text-xs text-gray-500 mt-0.5">Kepala Desa</p>
+      </div>
+    </div>
+    <div class="w-px h-8 bg-primary-200 mx-auto"></div>
+
+    <!-- Tier 2: Pengawas -->
+    <div class="flex justify-center mb-1" data-reveal="up" data-delay="2">
+      <div class="org-card w-56 bg-gradient-to-br from-purple-50 to-purple-100 border-purple-300">
+        <div class="w-16 h-16 rounded-full bg-purple-500 flex items-center justify-center mx-auto mb-3 shadow-lg"><i class="fa-solid fa-user-shield text-white text-2xl"></i></div>
+        <p class="text-[10px] uppercase tracking-widest text-purple-600 font-bold mb-1">Pengawas</p>
+        <p class="font-extrabold text-gray-800 text-sm">TOHA AL MAKTUB</p>
+      </div>
+    </div>
+    <div class="w-px h-8 bg-primary-200 mx-auto"></div>
+
+    <!-- Tier 3: Direktur -->
+    <div class="flex justify-center mb-1" data-reveal="up" data-delay="3">
+      <div class="org-card w-56 bg-gradient-to-br from-primary-50 to-primary-100 border-primary-400">
+        <div class="w-16 h-16 rounded-full bg-primary-600 flex items-center justify-center mx-auto mb-3 shadow-lg"><i class="fa-solid fa-star text-white text-2xl"></i></div>
+        <p class="text-[10px] uppercase tracking-widest text-primary-600 font-bold mb-1">Direktur</p>
+        <p class="font-extrabold text-gray-800 text-sm">MUHAMAD HANIF</p>
+      </div>
+    </div>
+    <div class="w-px h-8 bg-primary-200 mx-auto"></div>
+
+    <!-- Tier 4: Sekretaris & Bendahara -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-lg mx-auto mb-1" data-reveal="up" data-delay="4">
+      <div class="org-card bg-gradient-to-br from-sky-50 to-sky-100 border-sky-300">
+        <div class="w-14 h-14 rounded-full bg-sky-500 flex items-center justify-center mx-auto mb-3 shadow"><i class="fa-solid fa-pen-to-square text-white text-xl"></i></div>
+        <p class="text-[10px] uppercase tracking-widest text-sky-600 font-bold mb-1">Sekretaris</p>
+        <p class="font-extrabold text-gray-800 text-sm">CATUR RIYADI</p>
+      </div>
+      <div class="org-card bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-300">
+        <div class="w-14 h-14 rounded-full bg-emerald-600 flex items-center justify-center mx-auto mb-3 shadow"><i class="fa-solid fa-coins text-white text-xl"></i></div>
+        <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Bendahara</p>
+        <p class="font-extrabold text-gray-800 text-sm">ZIKRI RIZKIAN</p>
+      </div>
+    </div>
+    <div class="w-px h-8 bg-primary-200 mx-auto"></div>
+
+    <!-- Tier 5: Managers -->
+    <p class="text-center text-xs uppercase tracking-widest text-gray-400 font-semibold mb-4">Manager Unit Usaha</p>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto" data-reveal="up" data-delay="5">
+      <div class="org-card">
+        <div class="w-12 h-12 rounded-full bg-orange-400 flex items-center justify-center mx-auto mb-2 shadow"><i class="fa-solid fa-wifi text-white text-lg"></i></div>
+        <p class="text-[9px] uppercase tracking-widest text-orange-500 font-bold mb-0.5">Manager</p>
+        <p class="font-bold text-gray-800 text-xs">IMDAD DURROHIM</p>
+        <p class="text-[11px] text-gray-400 mt-0.5">Usaha Wifi</p>
+      </div>
+      <div class="org-card">
+        <div class="w-12 h-12 rounded-full bg-rose-400 flex items-center justify-center mx-auto mb-2 shadow"><i class="fa-solid fa-store text-white text-lg"></i></div>
+        <p class="text-[9px] uppercase tracking-widest text-rose-500 font-bold mb-0.5">Manager</p>
+        <p class="font-bold text-gray-800 text-xs">AHMAD ANSORI</p>
+        <p class="text-[11px] text-gray-400 mt-0.5">Pasar Desa</p>
+      </div>
+      <div class="org-card">
+        <div class="w-12 h-12 rounded-full bg-yellow-500 flex items-center justify-center mx-auto mb-2 shadow"><i class="fa-solid fa-cow text-white text-lg"></i></div>
+        <p class="text-[9px] uppercase tracking-widest text-yellow-600 font-bold mb-0.5">Manager</p>
+        <p class="font-bold text-gray-800 text-xs">RIYANTO</p>
+        <p class="text-[11px] text-gray-400 mt-0.5">Peternakan Sapi</p>
+      </div>
+      <div class="org-card">
+        <div class="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center mx-auto mb-2 shadow"><i class="fa-solid fa-fish text-white text-lg"></i></div>
+        <p class="text-[9px] uppercase tracking-widest text-teal-600 font-bold mb-0.5">Manager</p>
+        <p class="font-bold text-gray-800 text-xs">RAHMAT</p>
+        <p class="text-[11px] text-gray-400 mt-0.5">Budidaya Ikan Tawar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ UNIT USAHA ════════════════ -->
+<section id="unit-usaha" class="py-20 bg-gray-50 relative overflow-hidden">
+  <div class="blob w-72 h-72 bg-primary-200/40 -left-16 bottom-10" style="animation-duration:11s"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Layanan Kami</p>
+      <h2 class="sec-title">Unit <span>Usaha</span></h2>
+      <span class="sec-line"></span>
+      <p class="mt-4 text-gray-500 max-w-xl mx-auto text-sm">Berbagai unit usaha yang dikelola BUMDes untuk mendorong perekonomian warga Desa Tinggarjaya.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div class="lift-card bg-white border border-sky-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="1">
+        <div class="w-16 h-16 bg-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-wifi text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Jasa Pemasangan Wifi</h3>
+        <p class="text-xs text-gray-500">Layanan internet cepat dan terjangkau untuk seluruh warga desa.</p>
+        <span class="mt-4 inline-block text-sky-600 text-[11px] font-semibold bg-sky-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-teal-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="2">
+        <div class="w-16 h-16 bg-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-fish text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Budi Daya Ikan Nila Bioflok</h3>
+        <p class="text-xs text-gray-500">Budidaya ikan nila modern menggunakan sistem bioflok yang efisien.</p>
+        <span class="mt-4 inline-block text-teal-600 text-[11px] font-semibold bg-teal-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-blue-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="3">
+        <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-money-bill-transfer text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Counter &amp; BRI Link</h3>
+        <p class="text-xs text-gray-500">Layanan transaksi keuangan dan perbankan yang mudah dijangkau warga.</p>
+        <span class="mt-4 inline-block text-blue-600 text-[11px] font-semibold bg-blue-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-lime-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="4">
+        <div class="w-16 h-16 bg-lime-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-seedling text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Usaha Pertanian</h3>
+        <p class="text-xs text-gray-500">Pengelolaan lahan pertanian desa secara produktif dan berkelanjutan.</p>
+        <span class="mt-4 inline-block text-lime-700 text-[11px] font-semibold bg-lime-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-green-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="1">
+        <div class="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-leaf text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Green House Melon</h3>
+        <p class="text-xs text-gray-500">Budidaya melon premium dengan teknologi green house modern.</p>
+        <span class="mt-4 inline-block text-green-700 text-[11px] font-semibold bg-green-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-amber-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="2">
+        <div class="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-cow text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">Peternakan Sapi</h3>
+        <p class="text-xs text-gray-500">Pemeliharaan sapi unggul untuk meningkatkan pendapatan warga desa.</p>
+        <span class="mt-4 inline-block text-amber-700 text-[11px] font-semibold bg-amber-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-white border border-rose-100 rounded-2xl p-6 text-center shadow-md" data-reveal="up" data-delay="3">
+        <div class="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"><i class="fa-solid fa-store text-white text-2xl svc-icon"></i></div>
+        <h3 class="font-bold text-gray-800 text-sm mb-2">BUMDes Mart Sembako</h3>
+        <p class="text-xs text-gray-500">Toko kebutuhan pokok warga dengan harga terjangkau dan stok terjamin.</p>
+        <span class="mt-4 inline-block text-rose-600 text-[11px] font-semibold bg-rose-50 px-3 py-1 rounded-full">Aktif</span>
+      </div>
+      <div class="lift-card bg-gradient-to-br from-primary-700 to-primary-900 rounded-2xl p-6 text-center flex flex-col items-center justify-center" data-reveal="up" data-delay="4">
+        <i class="fa-solid fa-handshake text-accent-400 text-4xl mb-4"></i>
+        <h3 class="font-bold text-white text-sm mb-2">Tertarik Bermitra?</h3>
+        <p class="text-xs text-primary-200 mb-4">Hubungi kami untuk informasi kerjasama dan investasi desa.</p>
+        <a href="https://wa.me/6282242350529" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent-500 hover:bg-accent-600 text-white font-semibold text-xs rounded-full transition">
+          <i class="fa-brands fa-whatsapp"></i> Hubungi Kami
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ GALERI ════════════════ -->
+<section id="galeri" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Dokumentasi</p>
+      <h2 class="sec-title">Galeri <span>Kegiatan</span></h2>
+      <span class="sec-line"></span>
+      <p class="mt-4 text-gray-500 max-w-xl mx-auto text-sm">Momen-momen kegiatan dan perkembangan usaha BUMDes Arja Jaya Abadi.</p>
+    </div>
+    <div class="gallery-grid" id="gallery-container">
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.21.56 (1).jpeg" data-idx="0"><img src="img/WhatsApp Image 2026-07-19 at 13.21.56 (1).jpeg" alt="Kegiatan BUMDes 1" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.21.56.jpeg"   data-idx="1"><img src="img/WhatsApp Image 2026-07-19 at 13.21.56.jpeg"   alt="Kegiatan BUMDes 2" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.21.58.jpeg"   data-idx="2"><img src="img/WhatsApp Image 2026-07-19 at 13.21.58.jpeg"   alt="Kegiatan BUMDes 3" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.21.59.jpeg"   data-idx="3"><img src="img/WhatsApp Image 2026-07-19 at 13.21.59.jpeg"   alt="Kegiatan BUMDes 4" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.22.01.jpeg"   data-idx="4"><img src="img/WhatsApp Image 2026-07-19 at 13.22.01.jpeg"   alt="Kegiatan BUMDes 5" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.22.02 (1).jpeg" data-idx="5"><img src="img/WhatsApp Image 2026-07-19 at 13.22.02 (1).jpeg" alt="Kegiatan BUMDes 6" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.22.02 (2).jpeg" data-idx="6"><img src="img/WhatsApp Image 2026-07-19 at 13.22.02 (2).jpeg" alt="Kegiatan BUMDes 7" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item" data-src="img/WhatsApp Image 2026-07-19 at 13.22.02.jpeg"   data-idx="7"><img src="img/WhatsApp Image 2026-07-19 at 13.22.02.jpeg"   alt="Kegiatan BUMDes 8" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <!-- hidden -->
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.03.jpeg"     data-idx="8"><img src="img/WhatsApp Image 2026-07-19 at 13.22.03.jpeg"     alt="Kegiatan BUMDes 9"  loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.06 (1).jpeg" data-idx="9"><img src="img/WhatsApp Image 2026-07-19 at 13.22.06 (1).jpeg" alt="Kegiatan BUMDes 10" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.06.jpeg"     data-idx="10"><img src="img/WhatsApp Image 2026-07-19 at 13.22.06.jpeg"    alt="Kegiatan BUMDes 11" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.14.jpeg"     data-idx="11"><img src="img/WhatsApp Image 2026-07-19 at 13.22.14.jpeg"    alt="Kegiatan BUMDes 12" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.15.jpeg"     data-idx="12"><img src="img/WhatsApp Image 2026-07-19 at 13.22.15.jpeg"    alt="Kegiatan BUMDes 13" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.16.jpeg"     data-idx="13"><img src="img/WhatsApp Image 2026-07-19 at 13.22.16.jpeg"    alt="Kegiatan BUMDes 14" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.17.jpeg"     data-idx="14"><img src="img/WhatsApp Image 2026-07-19 at 13.22.17.jpeg"    alt="Kegiatan BUMDes 15" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.19.jpeg"     data-idx="15"><img src="img/WhatsApp Image 2026-07-19 at 13.22.19.jpeg"    alt="Kegiatan BUMDes 16" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.21 (1).jpeg" data-idx="16"><img src="img/WhatsApp Image 2026-07-19 at 13.22.21 (1).jpeg" alt="Kegiatan BUMDes 17" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+      <div class="gallery-item hidden" data-src="img/WhatsApp Image 2026-07-19 at 13.22.21.jpeg"     data-idx="17"><img src="img/WhatsApp Image 2026-07-19 at 13.22.21.jpeg"     alt="Kegiatan BUMDes 18" loading="lazy"><div class="gallery-overlay"><i class="fa-solid fa-magnifying-glass-plus text-white text-2xl"></i></div></div>
+    </div>
+    <div class="text-center mt-10">
+      <button id="load-more-btn"
+        class="inline-flex items-center gap-2 px-8 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-full shadow-lg transition-all duration-300 hover:scale-105">
+        <i class="fa-solid fa-images"></i> Lihat Lebih Banyak
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ KONTAK ════════════════ -->
+<section id="kontak" class="py-20 bg-gray-50 relative overflow-hidden">
+  <div class="blob w-72 h-72 bg-primary-100 left-0 bottom-0" style="animation-duration:14s"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center mb-14" data-reveal="up">
+      <p class="sec-badge">Hubungi Kami</p>
+      <h2 class="sec-title">Kontak &amp; <span>Lokasi</span></h2>
+      <span class="sec-line"></span>
+    </div>
+    <div class="grid lg:grid-cols-2 gap-10">
+      <!-- Info -->
+      <div data-reveal="left">
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Informasi Kontak</h3>
+        <div class="space-y-5">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-location-dot text-primary-600 text-xl"></i></div>
+            <div><p class="font-semibold text-gray-800 text-sm">Alamat Kantor</p><p class="text-gray-500 text-sm mt-0.5">Jl. Ahmad Yani No. 278, Tinggarjaya<br/>Sidareja, Kab. Cilacap, Jawa Tengah</p></div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa-brands fa-whatsapp text-green-600 text-xl"></i></div>
+            <div><p class="font-semibold text-gray-800 text-sm">WhatsApp</p><a href="https://wa.me/6282242350529" target="_blank" rel="noopener" class="text-primary-600 hover:text-primary-800 font-medium text-sm transition">0822-4235-0529</a></div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-clock text-orange-500 text-xl"></i></div>
+            <div><p class="font-semibold text-gray-800 text-sm">Jam Operasional</p><p class="text-gray-500 text-sm mt-0.5">Setiap Hari &bull; <span class="text-primary-600 font-semibold">08.00 – 16.00 WIB</span></p></div>
+          </div>
+        </div>
+        <div class="mt-8 p-5 bg-primary-50 border border-primary-100 rounded-2xl">
+          <p class="font-semibold text-primary-800 mb-3 text-sm">Kirim Pesan Langsung</p>
+          <a href="https://wa.me/6282242350529?text=Halo%20BUMDes%20Arja%20Jaya%20Abadi%2C%20saya%20ingin%20bertanya%20tentang..."
+             target="_blank" rel="noopener"
+             class="flex items-center justify-center gap-2 w-full py-3.5 bg-[#25D366] hover:bg-[#1cb857] text-white font-bold rounded-xl shadow transition-all duration-300 hover:scale-[1.02] text-sm">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Chat via WhatsApp Sekarang
+          </a>
+        </div>
+      </div>
+      <!-- Map -->
+      <div data-reveal="right">
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Peta Lokasi</h3>
+        <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-xl" style="height:380px">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3955.9948270316344!2d108.84085077449756!3d-7.459174573573857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f7a8da0000001%3A0x0!2sTinggarjaya%2C%20Sidareja%2C%20Cilacap%2C%20Jawa%20Tengah!5e0!3m2!1sid!2sid!4v1689000000000!5m2!1sid!2sid"
+            width="100%" height="100%" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Peta Lokasi BUMDes Arja Jaya Abadi"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="bg-primary-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <img src="img/logo/logo.jpeg" alt="Logo BUMDes" class="h-12 w-12 rounded-full object-cover ring-2 ring-accent-400" />
+          <div><p class="font-extrabold text-lg leading-tight">BUMDes</p><p class="text-xs text-primary-300">Arja Jaya Abadi</p></div>
+        </div>
+        <p class="text-primary-200 text-sm leading-relaxed">Badan Usaha Milik Desa yang berkomitmen membangun kemandirian ekonomi warga Desa Tinggarjaya, Sidareja, Cilacap.</p>
+        <p class="mt-3 text-xs text-primary-400 italic">Perdes No. 02 Tahun 2018</p>
+      </div>
+      <!-- Quick links -->
+      <div>
+        <h4 class="font-bold text-xs uppercase tracking-widest text-accent-400 mb-5">Menu Cepat</h4>
+        <ul class="space-y-2 text-sm text-primary-200">
+          <li><a href="#beranda"    class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Beranda</a></li>
+          <li><a href="#profil"     class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Profil &amp; Legalitas</a></li>
+          <li><a href="#potensi"    class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Potensi Desa</a></li>
+          <li><a href="#pengurus"   class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Susunan Pengurus</a></li>
+          <li><a href="#unit-usaha" class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Unit Usaha</a></li>
+          <li><a href="#galeri"     class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Galeri</a></li>
+          <li><a href="#kontak"     class="footer-link flex items-center gap-2"><i class="fa-solid fa-chevron-right text-xs text-accent-400"></i> Kontak</a></li>
+        </ul>
+      </div>
+      <!-- Contact -->
+      <div>
+        <h4 class="font-bold text-xs uppercase tracking-widest text-accent-400 mb-5">Kontak Kami</h4>
+        <ul class="space-y-3 text-sm text-primary-200">
+          <li class="flex items-start gap-3"><i class="fa-solid fa-location-dot text-accent-400 mt-0.5 flex-shrink-0"></i><span>Jl. Ahmad Yani No. 278, Tinggarjaya, Sidareja, Kab. Cilacap, Jawa Tengah</span></li>
+          <li class="flex items-center gap-3"><i class="fa-brands fa-whatsapp text-accent-400 flex-shrink-0"></i><a href="https://wa.me/6282242350529" target="_blank" rel="noopener" class="footer-link">0822-4235-0529</a></li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-clock text-accent-400 flex-shrink-0"></i><span>Setiap Hari, 08.00 – 16.00 WIB</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Divider + copyright -->
+    <div class="border-t border-primary-700/60 mt-12 pt-6 space-y-2">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
+        <p class="text-xs text-primary-400 text-center sm:text-left">
+          &copy; 2026 <span class="font-semibold text-primary-200">BUMDes Arja Jaya Abadi</span>. Semua hak dilindungi.
+        </p>
+        <p class="text-xs text-primary-400 text-center">
+          Desa Tinggarjaya &bull; Kec. Sidareja &bull; Kab. Cilacap &bull; Jawa Tengah
+        </p>
+      </div>
+      <!-- Developer credit -->
+      <div class="text-center pt-1">
+        <p class="text-[11px] text-primary-500">
+          Dirancang &amp; Dikembangkan dengan <i class="fa-solid fa-heart text-rose-400 mx-0.5"></i> oleh
+          <span class="font-bold text-accent-400 tracking-wide">coderNTT</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════ VANILLA JAVASCRIPT ════════════════ -->
+<script>
+/* ───────────────────────────────────────────
+   1. SMOOTH SCROLL – native anchor override
+─────────────────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* ───────────────────────────────────────────
+   2. NAVBAR – scroll + active link
+─────────────────────────────────────────── */
+const navbar   = document.getElementById('navbar');
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('section[id]');
+
+window.addEventListener('scroll', onScroll, { passive: true });
+
+function onScroll() {
+  // Glassmorphism intensify on scroll
+  navbar.classList.toggle('scrolled', window.scrollY > 30);
+
+  // Active link highlight
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+}
+
+/* ───────────────────────────────────────────
+   3. HAMBURGER + MOBILE DRAWER
+─────────────────────────────────────────── */
+const hamburger    = document.getElementById('hamburger');
+const mobileDrawer = document.getElementById('mobile-drawer');
+let drawerOpen = false;
+
+hamburger.addEventListener('click', () => {
+  drawerOpen = !drawerOpen;
+  hamburger.classList.toggle('open', drawerOpen);
+  mobileDrawer.classList.toggle('open', drawerOpen);
+  hamburger.setAttribute('aria-expanded', drawerOpen);
+  mobileDrawer.setAttribute('aria-hidden', !drawerOpen);
+});
+
+// Close drawer when a link inside is clicked
+mobileDrawer.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    drawerOpen = false;
+    hamburger.classList.remove('open');
+    mobileDrawer.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    mobileDrawer.setAttribute('aria-hidden', 'true');
+  });
+});
+
+// Close drawer on outside click
+document.addEventListener('click', e => {
+  if (drawerOpen && !navbar.contains(e.target) && !mobileDrawer.contains(e.target)) {
+    drawerOpen = false;
+    hamburger.classList.remove('open');
+    mobileDrawer.classList.remove('open');
+  }
+});
+
+/* ───────────────────────────────────────────
+   4. SCROLL-REVEAL (CSS + JS IntersectionObserver)
+─────────────────────────────────────────── */
+const revealEls = document.querySelectorAll('[data-reveal]');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* ───────────────────────────────────────────
+   5. GALLERY – Load More button
+─────────────────────────────────────────── */
+const loadMoreBtn  = document.getElementById('load-more-btn');
+const hiddenItems  = document.querySelectorAll('.gallery-item.hidden');
+
+loadMoreBtn.addEventListener('click', () => {
+  hiddenItems.forEach((item, i) => {
+    item.classList.remove('hidden');
+    // Stagger fade-in
+    item.style.opacity = '0';
+    item.style.transform = 'translateY(20px)';
+    item.style.transition = `opacity .4s ease ${i * 0.06}s, transform .4s ease ${i * 0.06}s`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        item.style.opacity = '1';
+        item.style.transform = 'none';
+      });
+    });
+  });
+  loadMoreBtn.style.display = 'none';
+});
+
+/* ───────────────────────────────────────────
+   6. LIGHTBOX with keyboard + swipe
+─────────────────────────────────────────── */
+const lightbox  = document.getElementById('lightbox');
+const lbImg     = document.getElementById('lb-img');
+const lbClose   = document.getElementById('lb-close');
+const lbPrev    = document.getElementById('lb-prev');
+const lbNext    = document.getElementById('lb-next');
+const lbCaption = document.getElementById('lb-caption');
+
+const allItems = Array.from(document.querySelectorAll('.gallery-item'));
+let curIdx = 0;
+
+function openLightbox(idx) {
+  curIdx = idx;
+  const src = allItems[curIdx].getAttribute('data-src');
+  const alt = allItems[curIdx].querySelector('img').alt;
+  lbImg.src = src;
+  lbImg.alt = alt;
+  lbCaption.textContent = alt + '  (' + (curIdx + 1) + ' / ' + allItems.length + ')';
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  lbImg.src = '';
+  document.body.style.overflow = '';
+}
+
+function lbShowPrev() {
+  curIdx = (curIdx - 1 + allItems.length) % allItems.length;
+  lbImg.src = allItems[curIdx].getAttribute('data-src');
+  lbCaption.textContent = allItems[curIdx].querySelector('img').alt + '  (' + (curIdx + 1) + ' / ' + allItems.length + ')';
+}
+
+function lbShowNext() {
+  curIdx = (curIdx + 1) % allItems.length;
+  lbImg.src = allItems[curIdx].getAttribute('data-src');
+  lbCaption.textContent = allItems[curIdx].querySelector('img').alt + '  (' + (curIdx + 1) + ' / ' + allItems.length + ')';
+}
+
+allItems.forEach((item, idx) => {
+  item.addEventListener('click', () => openLightbox(idx));
+});
+
+lbClose.addEventListener('click', closeLightbox);
+lbPrev.addEventListener('click', e => { e.stopPropagation(); lbShowPrev(); });
+lbNext.addEventListener('click', e => { e.stopPropagation(); lbShowNext(); });
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  lbShowPrev();
+  if (e.key === 'ArrowRight') lbShowNext();
+});
+
+// Touch swipe
+let touchStartX = 0;
+lightbox.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+lightbox.addEventListener('touchend',   e => {
+  const diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 50) { diff > 0 ? lbShowNext() : lbShowPrev(); }
+}, { passive: true });
+
+/* ───────────────────────────────────────────
+   7. ANIMATED NUMBER COUNTER (stats bar)
+─────────────────────────────────────────── */
+function animateCount(el, target, duration) {
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target.toLocaleString('id-ID') + (el.dataset.suffix || ''); clearInterval(timer); }
+    else el.textContent = start.toLocaleString('id-ID');
+  }, 16);
+}
+
+// Observe stat numbers
+const statNums = document.querySelectorAll('.stat-num[data-target]');
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el  = entry.target;
+      const tgt = parseInt(el.dataset.target);
+      animateCount(el, tgt, 1200);
+      statsObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+statNums.forEach(el => statsObserver.observe(el));
+
+// Trigger initial scroll check
+onScroll();
+</script>
+</body>
+</html>
