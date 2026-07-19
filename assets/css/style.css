@@ -1,0 +1,434 @@
+/* ============================================================
+   BUMDes Arja Jaya Abadi – Custom Stylesheet
+   Author  : coderNTT
+   Version : 2.0.0
+   Stack   : Tailwind CSS (CDN) + Pure CSS Animations
+   ============================================================ */
+
+/* ── Reset & Base ───────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { font-family: 'Poppins', sans-serif; background: #f8fafc; color: #1e293b; }
+
+/* ── Typography helpers ─────────────────────── */
+.sec-badge {
+  font-size: .7rem; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: #f97316; margin-bottom: .4rem; display: block;
+}
+.sec-title { font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1.2; }
+.sec-title span { color: #16a34a; }
+@media (min-width: 640px) { .sec-title { font-size: 2.35rem; } }
+.sec-line {
+  display: inline-block; width: 56px; height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #16a34a, #f97316);
+  margin-top: .55rem;
+}
+
+/* ============================================================
+   NAVBAR – glassmorphism
+   ============================================================ */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,.5);
+  transition: background .4s, box-shadow .4s, border-color .4s;
+}
+#navbar.scrolled {
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 4px 30px rgba(0,0,0,.08);
+  border-color: rgba(22,163,74,.15);
+}
+
+.nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px;
+}
+
+/* Brand */
+.nav-brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+.nav-brand img {
+  height: 42px; width: 42px; border-radius: 50%; object-fit: cover;
+  border: 2.5px solid #16a34a;
+  transition: border-color .3s, transform .3s;
+}
+.nav-brand:hover img { border-color: #f97316; transform: scale(1.07); }
+.nav-brand-text .top { font-weight: 800; font-size: .95rem; color: #15803d; line-height: 1.1; }
+.nav-brand-text .bot { font-size: .68rem; color: #6b7280; font-weight: 500; }
+
+/* Desktop links */
+.nav-links { display: flex; align-items: center; gap: .25rem; list-style: none; }
+.nav-links a {
+  font-size: .825rem; font-weight: 500; color: #475569;
+  padding: .45rem .85rem; border-radius: 9999px;
+  transition: color .25s, background .25s;
+  text-decoration: none; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 4px;
+  left: 50%; right: 50%;
+  height: 2px; background: #16a34a; border-radius: 9999px;
+  transition: left .25s, right .25s;
+}
+.nav-links a:hover,
+.nav-links a.active { color: #15803d; }
+.nav-links a:hover::after,
+.nav-links a.active::after { left: 14%; right: 14%; }
+
+/* CTA button */
+.nav-cta {
+  display: inline-flex !important; align-items: center; gap: .5rem;
+  padding: .5rem 1.2rem !important;
+  background: #16a34a !important; color: #fff !important;
+  border-radius: 9999px !important; font-weight: 600 !important;
+  font-size: .8rem !important;
+  transition: background .25s, transform .25s, box-shadow .25s !important;
+  box-shadow: 0 4px 14px rgba(22,163,74,.35);
+}
+.nav-cta:hover {
+  background: #15803d !important; transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(22,163,74,.45) !important;
+}
+.nav-cta::after { display: none !important; }
+
+/* ── Hamburger ───────────────────────────────── */
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  padding: .5rem; cursor: pointer;
+  background: none; border: none; border-radius: .5rem;
+}
+.hamburger span {
+  display: block; width: 24px; height: 2.5px;
+  background: #374151; border-radius: 9999px;
+  transition: all .35s cubic-bezier(.68,-.55,.265,1.55);
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+@media (max-width: 767px) {
+  .nav-links { display: none !important; }
+  .hamburger { display: flex; }
+}
+
+/* ── Mobile Drawer ───────────────────────────── */
+#mobile-drawer {
+  position: fixed; top: 68px; left: 0; right: 0; z-index: 8999;
+  background: rgba(255,255,255,.98); backdrop-filter: blur(20px);
+  border-bottom: 1px solid #e5e7eb;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s;
+}
+#mobile-drawer.open { max-height: 520px; opacity: 1; }
+#mobile-drawer ul {
+  list-style: none; padding: 1rem 1.5rem 1.25rem;
+  display: flex; flex-direction: column; gap: .25rem;
+}
+#mobile-drawer a {
+  display: block; padding: .7rem 1rem; border-radius: .75rem;
+  font-size: .875rem; font-weight: 500; color: #374151;
+  text-decoration: none; transition: background .2s, color .2s;
+}
+#mobile-drawer a:hover { background: #f0fdf4; color: #16a34a; }
+#mobile-drawer .mob-cta {
+  background: #16a34a; color: #fff !important;
+  text-align: center; border-radius: 9999px;
+  margin-top: .5rem; font-weight: 600;
+}
+#mobile-drawer .mob-cta:hover { background: #15803d; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero-overlay {
+  background: linear-gradient(135deg, rgba(21,128,61,.88), rgba(20,83,45,.72));
+}
+
+/* ============================================================
+   FLOATING BLOBS
+   ============================================================ */
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(60px); pointer-events: none; z-index: 0;
+  animation: blobFloat 8s ease-in-out infinite alternate;
+}
+@keyframes blobFloat {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(20px, 30px) scale(1.08); }
+}
+
+/* ============================================================
+   SCROLL-REVEAL  (CSS state, toggled by JS IntersectionObserver)
+   ============================================================ */
+[data-reveal] { opacity: 0; transition: opacity .7s ease, transform .7s ease; }
+[data-reveal='up']    { transform: translateY(40px); }
+[data-reveal='left']  { transform: translateX(-50px); }
+[data-reveal='right'] { transform: translateX(50px); }
+[data-reveal='scale'] { transform: scale(.88); }
+[data-reveal='fade']  { transform: none; }
+[data-reveal].revealed { opacity: 1 !important; transform: none !important; }
+
+/* Stagger helpers */
+[data-delay='1'] { transition-delay: .1s; }
+[data-delay='2'] { transition-delay: .2s; }
+[data-delay='3'] { transition-delay: .3s; }
+[data-delay='4'] { transition-delay: .4s; }
+[data-delay='5'] { transition-delay: .5s; }
+[data-delay='6'] { transition-delay: .6s; }
+
+/* ── Stat counter pop ── */
+@keyframes countPop {
+  0%   { transform: scale(.5); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.stat-num.pop { animation: countPop .6s ease forwards; }
+
+/* ── Tick-card slide-up ── */
+@keyframes tickUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+.tick-card { animation: tickUp .7s ease both; }
+
+/* ============================================================
+   CARD UTILITIES
+   ============================================================ */
+.lift-card { transition: transform .3s ease, box-shadow .3s ease; }
+.lift-card:hover { transform: translateY(-7px); box-shadow: 0 20px 50px rgba(0,0,0,.11); }
+
+.svc-icon { transition: transform .35s cubic-bezier(.34,1.56,.64,1); }
+.lift-card:hover .svc-icon { transform: rotate(-8deg) scale(1.15); }
+
+/* ── Org chart cards ── */
+.org-card {
+  background: #fff; border: 1.5px solid #e5e7eb;
+  border-radius: 1rem; padding: 1.25rem 1rem; text-align: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,.06);
+  transition: transform .3s, box-shadow .3s;
+}
+.org-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,.1); }
+
+/* ── Potensi image card ── */
+.potensi-card {
+  border-radius: 1.25rem; overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,.09);
+  transition: transform .35s, box-shadow .35s;
+}
+.potensi-card:hover { transform: translateY(-6px); box-shadow: 0 18px 50px rgba(0,0,0,.14); }
+
+/* ============================================================
+   GALLERY ALBUM CARDS  (rendered by JS)
+   ============================================================ */
+.gallery-album-card {
+  position: relative; border-radius: 1rem; overflow: hidden;
+  cursor: pointer; background: #111;
+  box-shadow: 0 6px 24px rgba(0,0,0,.1);
+  transition: transform .35s ease, box-shadow .35s ease;
+  aspect-ratio: 4/3;
+}
+.gallery-album-card:hover { transform: translateY(-6px); box-shadow: 0 18px 48px rgba(0,0,0,.18); }
+
+.gallery-album-card img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s ease, filter .5s ease;
+  filter: brightness(.88);
+}
+.gallery-album-card:hover img { transform: scale(1.07); filter: brightness(.7); }
+
+/* Gradient overlay */
+.gallery-album-card .card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,50,25,.85) 0%, transparent 55%);
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 1rem;
+}
+.gallery-album-card .card-title {
+  color: #fff; font-weight: 700; font-size: .85rem;
+  line-height: 1.3; text-shadow: 0 1px 4px rgba(0,0,0,.5);
+}
+.gallery-album-card .card-badge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  background: rgba(249,115,22,.9); color: #fff;
+  font-size: .68rem; font-weight: 700;
+  padding: .2rem .55rem; border-radius: 9999px;
+  margin-bottom: .4rem; width: fit-content;
+}
+
+/* ── Loading skeleton ── */
+.skeleton {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 1rem;
+  aspect-ratio: 4/3;
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+#lightbox {
+  position: fixed; inset: 0; z-index: 99999;
+  background: rgba(0,0,0,.94);
+  display: none; align-items: center; justify-content: center;
+}
+#lightbox.active { display: flex; animation: lbIn .25s ease; }
+@keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+
+#lb-img {
+  max-width: 90vw; max-height: 88vh;
+  border-radius: .6rem; object-fit: contain;
+  box-shadow: 0 0 60px rgba(0,0,0,.6);
+  transition: opacity .2s ease;
+}
+#lb-img.fading { opacity: 0; }
+
+#lb-close, #lb-prev, #lb-next {
+  position: absolute; background: rgba(255,255,255,.1);
+  color: #fff; border: none; cursor: pointer;
+  border-radius: .5rem; transition: background .2s, transform .2s;
+  line-height: 1;
+}
+#lb-close {
+  top: 1.2rem; right: 1.5rem;
+  font-size: 2.2rem; padding: .2rem .6rem;
+}
+#lb-close:hover { background: rgba(255,255,255,.25); transform: rotate(90deg); }
+
+#lb-prev, #lb-next {
+  top: 50%; transform: translateY(-50%);
+  font-size: 2.4rem; padding: .4rem .9rem;
+}
+#lb-prev:hover, #lb-next:hover { background: rgba(255,255,255,.25); }
+#lb-prev { left: 1rem; }
+#lb-next { right: 1rem; }
+
+#lb-caption {
+  position: absolute; bottom: 1.2rem;
+  left: 50%; transform: translateX(-50%);
+  color: rgba(255,255,255,.65); font-size: .75rem;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap; pointer-events: none;
+}
+
+/* ── Lb thumbnail strip ── */
+#lb-thumbs {
+  position: absolute; bottom: 2.8rem; left: 50%; transform: translateX(-50%);
+  display: flex; gap: .4rem; max-width: 80vw; overflow-x: auto; padding: .25rem;
+  scroll-snap-type: x mandatory;
+}
+#lb-thumbs::-webkit-scrollbar { height: 3px; }
+#lb-thumbs::-webkit-scrollbar-track { background: rgba(255,255,255,.1); }
+#lb-thumbs::-webkit-scrollbar-thumb { background: rgba(255,255,255,.4); border-radius: 9999px; }
+.lb-thumb {
+  width: 52px; height: 36px; object-fit: cover;
+  border-radius: .3rem; opacity: .5; cursor: pointer;
+  transition: opacity .2s, outline .2s;
+  flex-shrink: 0; scroll-snap-align: start;
+  border: 2px solid transparent;
+}
+.lb-thumb.active { opacity: 1; border-color: #f97316; }
+.lb-thumb:hover  { opacity: .85; }
+
+/* ============================================================
+   TRANSPARANSI KEUANGAN – table polish
+   ============================================================ */
+table { border-collapse: collapse; }
+thead th { white-space: nowrap; }
+tbody tr { transition: background .15s; }
+
+/* ── Progress bar (used inside JS rendered cards) ── */
+.progress-bar-wrap {
+  height: 6px; background: #e5e7eb; border-radius: 9999px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 9999px;
+  background: linear-gradient(90deg, #16a34a, #4ade80);
+  transition: width 1s ease;
+}
+
+/* ============================================================
+   WHATSAPP FLOAT BUTTON
+   ============================================================ */
+#wa-float {
+  position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 8000;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25D366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.7rem; text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,211,102,.55);
+  animation: waPulse 2.8s ease-in-out infinite;
+  transition: transform .25s;
+}
+#wa-float:hover { transform: scale(1.12); }
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,.55); }
+  50%      { box-shadow: 0 4px 40px rgba(37,211,102,.85), 0 0 0 10px rgba(37,211,102,.12); }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer-link { color: #a7f3d0; text-decoration: none; transition: color .2s; }
+.footer-link:hover { color: #fff; }
+
+/* ============================================================
+   FOCUS VISIBLE – WCAG AA keyboard navigation
+   ============================================================ */
+:focus-visible {
+  outline: 3px solid #f97316;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   FINANCE TABS  (Transparansi Keuangan)
+   ============================================================ */
+
+/* Tab button – default (inactive) */
+.fin-tab {
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  letter-spacing: .01em;
+  user-select: none;
+}
+.fin-tab:hover {
+  color: #15803d;
+  background: rgba(255,255,255,.7);
+}
+
+/* Tab button – active */
+.fin-tab--active {
+  background: #15803d !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(21,128,61,.30);
+}
+
+/* Panel fade-in animation */
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.finance-panel-fade {
+  animation: panelFadeIn .35s ease both;
+}
+
+/* Table row transition */
+#finance-tbody tr {
+  transition: background .15s;
+}
+#finance-tbody tr:hover {
+  background: #f0fdf4;
+}
