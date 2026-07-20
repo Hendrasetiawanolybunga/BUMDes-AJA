@@ -574,6 +574,199 @@
   })();
 
   /* ══════════════════════════════════════════════════════
+     10. SARAN MODULE – star rating + WhatsApp redirect
+  ══════════════════════════════════════════════════════ */
+  const SaranModule = (function () {
+
+    /* Star label map */
+    const STAR_LABELS = {
+      1: '😞 Kurang',
+      2: '😐 Cukup',
+      3: '🙂 Baik',
+      4: '😊 Sangat Baik',
+      5: '🤩 Luar Biasa',
+    };
+
+    const WA_NUMBER = '6282242350529';
+
+    function _paintStars (count, stars) {
+      stars.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx < count);
+        btn.setAttribute('aria-pressed', String(idx < count));
+      });
+    }
+
+    function _showError (el, show) {
+      el.classList.toggle('visible', show);
+      el.classList.toggle('hidden', !show);
+    }
+
+    function _invalidate (input, errorEl) {
+      input.classList.add('is-invalid');
+      _showError(errorEl, true);
+    }
+
+    function _clearInvalid (input, errorEl) {
+      input.classList.remove('is-invalid');
+      _showError(errorEl, false);
+    }
+
+    function _buildMessage (nama, instansi, rating, pesan) {
+      const stars  = '⭐'.repeat(rating);
+      const label  = STAR_LABELS[rating] || '';
+      return (
+        `Halo BUMDes Arja Jaya Abadi 👋\n\n` +
+        `Saya ingin memberikan ulasan dan saran:\n\n` +
+        `👤 *Nama*       : ${nama}\n` +
+        `🏢 *Instansi*   : ${instansi}\n` +
+        `⭐ *Penilaian*  : ${stars} ${label}\n\n` +
+        `💬 *Pesan & Saran*:\n${pesan}\n\n` +
+        `_Dikirim melalui website BUMDes Arja Jaya Abadi_`
+      );
+    }
+
+    function init () {
+      const form      = document.getElementById('saran-form');
+      if (!form) return;
+
+      /* ── DOM refs ── */
+      const namaInput     = document.getElementById('saran-nama');
+      const instansiInput = document.getElementById('saran-instansi');
+      const pesanInput    = document.getElementById('saran-pesan');
+      const ratingInput   = document.getElementById('saran-rating');
+      const starLabel     = document.getElementById('star-label');
+      const starError     = document.getElementById('star-error');
+      const starBtns      = Array.from(document.querySelectorAll('.star-btn'));
+
+      /* ── Collect sibling error elements ── */
+      const namaError    = namaInput.parentElement.querySelector('.saran-error');
+      const instansiError = instansiInput.parentElement.querySelector('.saran-error');
+      const pesanError   = pesanInput.parentElement.querySelector('.saran-error');
+
+      /* ── Star rating interaction ── */
+      let currentRating = 0;
+
+      starBtns.forEach((btn) => {
+        const val = parseInt(btn.dataset.value, 10);
+
+        /* Hover – preview */
+        btn.addEventListener('mouseenter', () => {
+          starBtns.forEach((b, idx) => b.classList.toggle('hovered', idx < val));
+        });
+
+        /* Mouse leave – restore selected state */
+        btn.addEventListener('mouseleave', () => {
+          starBtns.forEach(b => b.classList.remove('hovered'));
+        });
+
+        /* Click – commit selection */
+        btn.addEventListener('click', () => {
+          currentRating = val;
+          ratingInput.value = val;
+          _paintStars(val, starBtns);
+          starLabel.textContent = STAR_LABELS[val] || '';
+          starLabel.style.color = '#f59e0b';
+
+          /* Clear star error if it was showing */
+          starError.classList.add('hidden');
+          starError.classList.remove('visible');
+        });
+
+        /* Keyboard Enter/Space */
+        btn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+
+      /* ── Live clear-on-type validation ── */
+      namaInput.addEventListener('input', () => {
+        if (namaInput.value.trim()) _clearInvalid(namaInput, namaError);
+      });
+      instansiInput.addEventListener('input', () => {
+        if (instansiInput.value.trim()) _clearInvalid(instansiInput, instansiError);
+      });
+      pesanInput.addEventListener('input', () => {
+        if (pesanInput.value.trim()) _clearInvalid(pesanInput, pesanError);
+      });
+
+      /* ── Form submit ── */
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const nama     = namaInput.value.trim();
+        const instansi = instansiInput.value.trim();
+        const pesan    = pesanInput.value.trim();
+        const rating   = parseInt(ratingInput.value, 10);
+
+        /* Validate – collect all errors before stopping */
+        let valid = true;
+
+        if (!nama) {
+          _invalidate(namaInput, namaError);
+          valid = false;
+        } else {
+          _clearInvalid(namaInput, namaError);
+        }
+
+        if (!instansi) {
+          _invalidate(instansiInput, instansiError);
+          valid = false;
+        } else {
+          _clearInvalid(instansiInput, instansiError);
+        }
+
+        if (!rating || rating < 1) {
+          starError.classList.remove('hidden');
+          starError.classList.add('visible');
+          valid = false;
+        } else {
+          starError.classList.add('hidden');
+          starError.classList.remove('visible');
+        }
+
+        if (!pesan) {
+          _invalidate(pesanInput, pesanError);
+          valid = false;
+        } else {
+          _clearInvalid(pesanInput, pesanError);
+        }
+
+        if (!valid) {
+          /* Focus first invalid field for accessibility */
+          const firstInvalid = form.querySelector('.is-invalid, [aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        /* Build & encode message */
+        const message = _buildMessage(nama, instansi, rating, pesan);
+        const encoded = encodeURIComponent(message);
+        const waURL   = `https://wa.me/${WA_NUMBER}?text=${encoded}`;
+
+        /* Open WhatsApp in new tab */
+        window.open(waURL, '_blank', 'noopener,noreferrer');
+
+        /* Reset form */
+        form.reset();
+        currentRating = 0;
+        ratingInput.value = '0';
+        _paintStars(0, starBtns);
+        starLabel.textContent = '';
+        starLabel.style.color = '';
+        starBtns.forEach(b => {
+          b.classList.remove('active', 'hovered');
+          b.setAttribute('aria-pressed', 'false');
+        });
+      });
+    }
+
+    return { init };
+  })();
+
+  /* ══════════════════════════════════════════════════════
      BOOTSTRAP – run all modules after DOM is ready
   ══════════════════════════════════════════════════════ */
   function boot () {
@@ -585,6 +778,7 @@
     LightboxModule.init();
     GalleryModule.init(); // last – injects DOM, then observes
     FinanceModule.init(); // finance dashboard
+    SaranModule.init();   // kotak saran & ulasan
   }
 
   // DOMContentLoaded is already past when defer scripts run,

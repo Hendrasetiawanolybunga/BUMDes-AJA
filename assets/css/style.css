@@ -432,3 +432,53 @@ tbody tr { transition: background .15s; }
 #finance-tbody tr:hover {
   background: #f0fdf4;
 }
+
+/* ============================================================
+   KOTAK SARAN – form inputs & star rating
+   ============================================================ */
+
+/* Input base */
+.saran-input {
+  background: #f9fafb;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.saran-input:focus {
+  background: #fff;
+}
+.saran-input.is-invalid {
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 0 3px rgba(244,63,94,.12);
+}
+
+/* Star buttons */
+.star-btn {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  cursor: pointer;
+  line-height: 1;
+}
+.star-btn.active i,
+.star-btn.hovered i {
+  color: #f59e0b; /* amber-400 */
+}
+.star-btn i {
+  transition: color .15s ease, transform .15s ease;
+}
+.star-btn:hover i,
+.star-btn.hovered i {
+  transform: scale(1.18);
+}
+
+/* Star rating label descriptors */
+#star-label {
+  transition: color .2s;
+}
+
+/* Inline error messages */
+.saran-error {
+  display: none;
+}
+.saran-error.visible {
+  display: block;
+}
